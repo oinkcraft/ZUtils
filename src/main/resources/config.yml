@@ -1,0 +1,24 @@
+# ZUtils is SQL compatible. Should the plugin store warnings in an SQL database?
+sql:
+  enable: true
+  host:
+  port:
+  username:
+
+# ZUtils is also Dizcord compatible. Should the plugin send messages to your discord server?
+dizcord:
+  enable: false
+  log: true
+  log-actions: ["WARNING", "BAN", "TEMP_BAN","KICK"]
+
+warnings:
+  autokick:
+    enabled: false
+    warning-limit: 5
+    message: "Please abide by the rules!"
+  autoban:
+    enabled: false
+    warning-limit: 15
+    message: "You were automatically banned by ZUtils, because you failed to abide by the rules!"
+
+

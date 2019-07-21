@@ -1,0 +1,8 @@
+name: ZUtils
+version: ${project.version}
+main: zaphx.zutils.ZUtils
+api-version: 1.13
+prefix: ZUtils
+softdepend: [Dizcord]
+description: The ZUtils plugin
+website: https://github.com/Zaph-x

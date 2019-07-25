@@ -1,4 +1,4 @@
-package zaphx.zutils.tests;
+package zaphx.zutils.managers;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -158,7 +158,7 @@ public class SQLHandler {
      *
      * @return The amount of entries in the table
      */
-    long countTickets() {
+    public long countTickets() {
         Future<Long> future = CompletableFuture.supplyAsync(() -> {
             try {
                 Connection connection = this.connection == null ? this.getConnection() : this.connection;
@@ -194,7 +194,7 @@ public class SQLHandler {
      * @param player The player to count tickets for
      * @return The amount of entries in the table for the player
      */
-    Long countTickets(Player player) {
+    public Long countTickets(Player player) {
         Future<Long> future = CompletableFuture.supplyAsync(() -> {
             try {
                 Connection connection = this.connection == null ? this.getConnection() : this.connection;

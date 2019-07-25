@@ -16,6 +16,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import zaphx.zutils.managers.SQLHandler;
+import zaphx.zutils.managers.WarningFactory;
 import zaphx.zutils.objects.ActionType;
 import zaphx.zutils.ZUtils;
 import zaphx.zutils.tests.helpers.TestInstanceCreator;

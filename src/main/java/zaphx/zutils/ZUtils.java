@@ -3,7 +3,7 @@ package zaphx.zutils;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import zaphx.zutils.managers.SQLHandler;
+import zaphx.zutils.tests.SQLHandler;
 
 import java.io.File;
 

@@ -3,7 +3,7 @@
  * Multiverse 2 is licensed under the BSD License.                            *
  ******************************************************************************/
 
-package zaphx.zutils.managers.helpers;
+package zaphx.zutils.tests.helpers;
 
 import zaphx.zutils.ZUtils;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.MockGateway;
 import org.powermock.reflect.Whitebox;
-import zaphx.zutils.managers.SQLHandler;
+import zaphx.zutils.tests.SQLHandler;
 
 import java.io.File;
 import java.lang.reflect.Field;

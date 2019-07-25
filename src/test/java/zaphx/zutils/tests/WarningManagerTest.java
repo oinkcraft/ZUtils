@@ -1,4 +1,4 @@
-package zaphx.zutils.managers;
+package zaphx.zutils.tests;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -18,7 +18,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import zaphx.zutils.objects.ActionType;
 import zaphx.zutils.ZUtils;
-import zaphx.zutils.managers.helpers.TestInstanceCreator;
+import zaphx.zutils.tests.helpers.TestInstanceCreator;
 
 import java.sql.*;
 

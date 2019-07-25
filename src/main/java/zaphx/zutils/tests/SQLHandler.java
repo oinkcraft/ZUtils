@@ -1,4 +1,4 @@
-package zaphx.zutils.managers;
+package zaphx.zutils.tests;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

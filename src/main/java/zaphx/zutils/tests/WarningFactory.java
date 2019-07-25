@@ -1,4 +1,4 @@
-package zaphx.zutils.managers;
+package zaphx.zutils.tests;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -3,7 +3,7 @@
  * Multiverse 2 is licensed under the BSD License.                            *
  ******************************************************************************/
 
-package zaphx.zutils.managers.helpers;
+package zaphx.zutils.tests.helpers;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;

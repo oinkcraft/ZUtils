@@ -1,4 +1,4 @@
-package zaphx.zutils.tests;
+package zaphx.zutils.managers;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -7,11 +7,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import zaphx.zutils.ZUtils;
-import zaphx.zutils.tests.helpers.TestInstanceCreator;
+import zaphx.zutils.managers.helpers.TestInstanceCreator;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.*;
 
 public class ZUtilsTest {
     TestInstanceCreator testIntance;

@@ -1,4 +1,4 @@
-package zaphx.zutils.Objects;
+package zaphx.zutils.objects;
 
 public enum ActionType {
 

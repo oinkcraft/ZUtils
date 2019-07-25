@@ -3,10 +3,9 @@
  * Multiverse 2 is licensed under the BSD License.                            *
  ******************************************************************************/
 
-package zaphx.zutils.tests.helpers;
+package zaphx.zutils.managers.helpers;
 
 import zaphx.zutils.ZUtils;
-import junit.framework.Assert;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -27,9 +26,11 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.MockGateway;
 import org.powermock.reflect.Whitebox;
+import zaphx.zutils.managers.SQLHandler;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,10 +44,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.*;
 
 /**
  * This class is a modified version of the Multiverse-Core class 'TestInstanceCreator.java' which is licensed under the BSD.
@@ -83,8 +81,11 @@ public class TestInstanceCreator {
             PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("ZUtils", "1.0-Test",
                     "zaphx.zutils.ZUtils"));
             when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
-            core = PowerMockito.spy(new ZUtils(mockPluginLoader, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
 
+            Connection mockConnection = mock(Connection.class);
+            core = PowerMockito.spy(new ZUtils(mockPluginLoader, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
+            SQLHandler sqlHandler = spy(new SQLHandler(mockConnection));
+            core.sqlHandler = sqlHandler;
             // Let's let all MV files go to bin/test
             doReturn(pluginDirectory).when(core).getDataFolder();
 

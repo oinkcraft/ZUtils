@@ -1,8 +1,8 @@
-package zaphx.zutils.tests;
+package zaphx.zutils.managers;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import zaphx.zutils.Objects.ActionType;
+import zaphx.zutils.objects.ActionType;
 import zaphx.zutils.ZUtils;
 
 import static org.bukkit.ChatColor.GRAY;
@@ -26,7 +26,9 @@ public class WarningFactory {
         this.sqlHandler = sqlHandler;
     }
 
-    public void
+    public void updateTicket(Player player, CommandSender sender, String reason) {
+
+    }
 
     public void sendWarning(Player player, CommandSender sender, String reason) {
         player.sendMessage(GRAY + "You have been warned by " + sender.getName() + " for: " + RED + reason);

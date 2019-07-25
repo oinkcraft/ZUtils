@@ -1,8 +1,9 @@
-package zaphx.zutils.tests;
+package zaphx.zutils.managers;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.intellij.lang.annotations.Language;
+import org.mockito.internal.util.MockUtil;
 import zaphx.zutils.ZUtils;
 
 import java.sql.*;
@@ -45,12 +46,14 @@ public class SQLHandler {
     private final String DATABASE = config.getString("sql.database");
 
     private Connection connection;
+
     /**
      * The default constructor
      */
     public SQLHandler(Connection connection) {
         this.connection = connection;
     }
+
     public SQLHandler() {
         this.connection = getConnection();
     }
@@ -121,8 +124,32 @@ public class SQLHandler {
         // always replace this -> ¼
         try {
             future.get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (ExecutionException e) {
+            if (!this.HOST.equals(""))
+                e.printStackTrace();
+        }
+    }
+
+    public void createWarningTableIfNotExist() {
+        Future<Void> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                Connection connection = this.connection == null ? this.getConnection() : this.connection;
+                PreparedStatement ps = connection.prepareCall("CREATE TABLE IF NOT EXISTS ?warnings (ticket INTEGER UNSIGNED NOT NULL PRIMARY KEY, uuid VARCHAR(255) NOT NULL, warning_date DATE NOT NULL, reason VARCHAR(255) NOT NULL, warnee_uuid VARCHAR(255) NOT NULL)");
+                ps.setString(1, prefix);
+                ps.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+        try {
+            future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            // Check if the instance is a mock object. if it is, we don't want to print the stacktrace, as it is inevitable
+            if (!MockUtil.isMock(this))
+                e.printStackTrace();
         }
     }
 
@@ -153,7 +180,9 @@ public class SQLHandler {
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            // Check if the instance is a mock object. if it is, we don't want to print the stacktrace, as it is inevitable
+            if (!MockUtil.isMock(this))
+                e.printStackTrace();
         }
         return 0L;
 
@@ -169,7 +198,7 @@ public class SQLHandler {
         Future<Long> future = CompletableFuture.supplyAsync(() -> {
             try {
                 Connection connection = this.connection == null ? this.getConnection() : this.connection;
-                PreparedStatement ps = connection.prepareCall("SELECT COUNT(ticket) AS size FROM " + prefix + "warnings WHERE uuid = '"+player.getUniqueId()+"'");
+                PreparedStatement ps = connection.prepareCall("SELECT COUNT(ticket) AS size FROM " + prefix + "warnings WHERE uuid = '" + player.getUniqueId() + "'");
                 List<Long> list = new ArrayList<>();
                 ResultSet set = ps.executeQuery();
                 if (set == null)
@@ -187,7 +216,9 @@ public class SQLHandler {
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            // Check if the instance is a mock object. if it is, we don't want to print the stacktrace, as it is inevitable
+            if (!MockUtil.isMock(this))
+                e.printStackTrace();
         }
         return 0L;
 

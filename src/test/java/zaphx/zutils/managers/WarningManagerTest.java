@@ -1,4 +1,4 @@
-package zaphx.zutils.tests;
+package zaphx.zutils.managers;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -16,9 +16,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import zaphx.zutils.Objects.ActionType;
+import zaphx.zutils.objects.ActionType;
 import zaphx.zutils.ZUtils;
-import zaphx.zutils.tests.helpers.TestInstanceCreator;
+import zaphx.zutils.managers.helpers.TestInstanceCreator;
 
 import java.sql.*;
 
@@ -30,33 +30,35 @@ import static org.powermock.api.easymock.PowerMock.expectPrivate;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ZUtils.class, PluginDescriptionFile.class, JavaPluginLoader.class, SQLHandler.class, DriverManager.class, WarningFactory.class})
-@PowerMockIgnore("javax.script.*")
+@PowerMockIgnore({"javax.script.*","java.sql.*"})
 public class WarningManagerTest {
-    TestInstanceCreator testIntance;
-    Server mockServer;
-    CommandSender mockServerCommandSender;
-    Connection connection;
-    ZUtils zUtils;
+
+    private TestInstanceCreator testIntance;
+    private ZUtils zUtils;
+    private SQLHandler sqlHandler;
 
     @Before
     public void setUp() throws Exception {
         testIntance = new TestInstanceCreator();
         assertTrue(testIntance.setUp());
-        mockServer = testIntance.getServer();
-        mockServerCommandSender = testIntance.getCommandSender();
+        Server mockServer = testIntance.getServer();
+        CommandSender mockServerCommandSender = testIntance.getCommandSender();
         Plugin plugin = mockServer.getPluginManager().getPlugin("ZUtils");
         zUtils = (ZUtils) plugin;
-        connection = mock(Connection.class);
+        Connection mockConnection = mock(Connection.class);
 
         PowerMockito.mockStatic(DriverManager.class);
-        PowerMockito.when(DriverManager.getConnection(anyString(), anyString(), anyString())).thenReturn(connection);
+        PowerMockito.when(DriverManager.getConnection(anyString(), anyString(), anyString())).thenReturn(mockConnection);
 
 
+        sqlHandler = spy(new SQLHandler(mockConnection));
+        zUtils.sqlHandler = sqlHandler;
     }
 
     @After
     public void tearDown() {
         testIntance.tearDown();
+        sqlHandler.closeConnection();
     }
 
     @Test
@@ -65,7 +67,6 @@ public class WarningManagerTest {
         // SETUP
 
         Connection mockConnection = mock(Connection.class);
-        SQLHandler sqlHandler = spy(new SQLHandler(mockConnection));
         CommandSender mockCommandSender = mock(CommandSender.class);
         Player mockWarned = mock(Player.class);
         when(mockCommandSender.getName()).thenReturn("Zaphoo");
@@ -88,8 +89,6 @@ public class WarningManagerTest {
         System.out.println("Checking if user gets kicked when autokick is enabled");
         // SETUP
         FileConfiguration config = mock(FileConfiguration.class);
-        Connection mockConnection = mock(Connection.class);
-        SQLHandler sqlHandler = spy(new SQLHandler(mockConnection));
         WarningFactory warningFactory = new WarningFactory(zUtils, sqlHandler);
         Player mockPlayer = mock(Player.class);
 
@@ -113,8 +112,6 @@ public class WarningManagerTest {
         // SETUP
         FileConfiguration config = mock(FileConfiguration.class);
         Player mockPlayer = mock(Player.class);
-        Connection mockConnection = mock(Connection.class);
-        SQLHandler sqlHandler = spy(new SQLHandler(mockConnection));
 
         WarningFactory warningFactory = spy(new WarningFactory(zUtils, sqlHandler));
         when(zUtils.getConfig()).thenReturn(config);
@@ -144,8 +141,6 @@ public class WarningManagerTest {
         // SETUP
         FileConfiguration config = mock(FileConfiguration.class);
         Player mockPlayer = mock(Player.class);
-        Connection mockConnection = mock(Connection.class);
-        SQLHandler sqlHandler = spy(new SQLHandler(mockConnection));
         WarningFactory warningFactory = spy(new WarningFactory(zUtils, sqlHandler));
 
         when(zUtils.getConfig()).thenReturn(config);
@@ -166,9 +161,7 @@ public class WarningManagerTest {
 
     @Test
     public void getInstance_setsNotNull() {
-
-        Connection mockConnection = mock(Connection.class);
-        SQLHandler sqlHandler = spy(new SQLHandler(mockConnection));
+        System.out.println("Testing if instance is set");
         WarningFactory warningFactory = new WarningFactory(zUtils, sqlHandler);
 
         assertNotNull(warningFactory);

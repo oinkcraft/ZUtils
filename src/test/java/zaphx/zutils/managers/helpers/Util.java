@@ -3,7 +3,7 @@
  * Multiverse 2 is licensed under the BSD License.                            *
  ******************************************************************************/
 
-package zaphx.zutils.tests.helpers;
+package zaphx.zutils.managers.helpers;
 
 import java.io.File;
 import java.io.IOException;

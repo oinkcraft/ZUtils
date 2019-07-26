@@ -1,5 +1,6 @@
 package zaphx.zutils.managers;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import zaphx.zutils.objects.ActionType;
@@ -27,7 +28,19 @@ public class WarningFactory {
     }
 
     public void updateTicket(Player player, CommandSender sender, String reason) {
+        sqlHandler.executeStatementAndPost("INSERT INTO %swarnings (uuid, warning_date, reason, warnee_uuid) VALUES ('%s', '%s', '%s', '%s')",
+                sqlHandler.prefix,
+                player.getUniqueId(),
+                reason,
+                sender.getName().equalsIgnoreCase("console") ? sender.getName(): ((Player) sender).getUniqueId());
+    }
 
+    public void updateTicket(OfflinePlayer player, CommandSender sender, String reason) {
+        sqlHandler.executeStatementAndPost("INSERT INTO %swarnings (uuid, warning_date, reason, warnee_uuid) VALUES ('%s', '%s', '%s', '%s')",
+                sqlHandler.prefix,
+                player.getUniqueId(),
+                reason,
+                sender.getName().equalsIgnoreCase("console") ? sender.getName(): ((Player) sender).getUniqueId());
     }
 
     public void sendWarning(Player player, CommandSender sender, String reason) {

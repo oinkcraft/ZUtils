@@ -32,8 +32,8 @@ import static org.powermock.api.easymock.PowerMock.expectPrivate;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ZUtils.class, PluginDescriptionFile.class, JavaPluginLoader.class, SQLHandler.class, DriverManager.class, WarningFactory.class})
-@PowerMockIgnore({"javax.script.*","java.sql.*"})
-public class WarningManagerTest {
+@PowerMockIgnore({"javax.script.*"})
+public class WarningFactoryTest {
 
     private TestInstanceCreator testIntance;
     private ZUtils zUtils;
@@ -44,7 +44,6 @@ public class WarningManagerTest {
         testIntance = new TestInstanceCreator();
         assertTrue(testIntance.setUp());
         Server mockServer = testIntance.getServer();
-        CommandSender mockServerCommandSender = testIntance.getCommandSender();
         Plugin plugin = mockServer.getPluginManager().getPlugin("ZUtils");
         zUtils = (ZUtils) plugin;
         Connection mockConnection = mock(Connection.class);
@@ -67,8 +66,6 @@ public class WarningManagerTest {
     public void sendWarning_userGetsWarning() {
         System.out.println("Checking if user gets warning and sender gets result");
         // SETUP
-
-        Connection mockConnection = mock(Connection.class);
         CommandSender mockCommandSender = mock(CommandSender.class);
         Player mockWarned = mock(Player.class);
         when(mockCommandSender.getName()).thenReturn("Zaphoo");

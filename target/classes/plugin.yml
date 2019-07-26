@@ -6,3 +6,28 @@ prefix: ZUtils
 softdepend: [Dizcord]
 description: The ZUtils plugin
 website: https://github.com/Zaph-x
+
+commands:
+  warn:
+    usage: /warn <user> <reason>
+    permission: zutils.warn.other
+    permission-message: §cYou do not have permission to perform that command
+    aliases:
+      - zwarn
+      - wrn
+
+permissions:
+  zutils.*:
+    description: Root permission for the ZUtils plugin
+    children:
+      - zutils.warn.*
+  zutils.warn.*:
+    description: Root permission for the warning module in ZUtils
+    children:
+      - zutils.warn.others
+      -
+  zutils.warn.other:
+    description: Gives the player permission to warn others
+    children:
+      - zutils.warn.view
+

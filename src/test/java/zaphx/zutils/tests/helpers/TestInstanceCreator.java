@@ -5,6 +5,11 @@
 
 package zaphx.zutils.tests.helpers;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.PluginIdentifiableCommand;
+import org.mockito.internal.util.reflection.FieldSetter;
+import org.yaml.snakeyaml.reader.StreamReader;
 import zaphx.zutils.ZUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,6 +34,9 @@ import org.powermock.reflect.Whitebox;
 import zaphx.zutils.managers.SQLHandler;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -77,17 +85,20 @@ public class TestInstanceCreator {
             when(mockServer.getLogger()).thenReturn(Util.logger);
             when(mockServer.getWorldContainer()).thenReturn(worldsDirectory);
 
+            InputStream reader = new FileInputStream(new File("").getAbsolutePath() + "//src//main//resources//plugin.yml");
             // Return a fake PDF file.
-            PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile("ZUtils", "1.0-Test",
-                    "zaphx.zutils.ZUtils"));
+            PluginDescriptionFile pdf = PowerMockito.spy(new PluginDescriptionFile(reader));
             when(pdf.getAuthors()).thenReturn(new ArrayList<String>());
 
             Connection mockConnection = mock(Connection.class);
             core = PowerMockito.spy(new ZUtils(mockPluginLoader, pdf, pluginDirectory, new File(pluginDirectory, "testPluginFile")));
             SQLHandler sqlHandler = spy(new SQLHandler(mockConnection));
             core.sqlHandler = sqlHandler;
+            core.isTest = true;
             // Let's let all MV files go to bin/test
             doReturn(pluginDirectory).when(core).getDataFolder();
+
+
 
             doReturn(true).when(core).isEnabled();
             doReturn(Util.logger).when(core).getLogger();

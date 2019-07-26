@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/../Spigot Development/Server/plugins</output-path>
     <root id="archive" name="ZUtils.jar">
       <element id="module-output" name="ZUtils" />
+      <element id="library" level="project" name="Maven: org.mockito:mockito-core:3.0.0" />
     </root>
   </artifact>
 </component>

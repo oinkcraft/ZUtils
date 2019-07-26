@@ -3,6 +3,7 @@ package zaphx.zutils;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
+import zaphx.zutils.commands.WarningCommand;
 import zaphx.zutils.managers.SQLHandler;
 
 import java.io.File;
@@ -11,6 +12,14 @@ public class ZUtils extends JavaPlugin {
 
     private static ZUtils instance;
     public SQLHandler sqlHandler;
+    public boolean isTest = false;
+
+    /**
+     * This constructor is meant for the server to call. Do not use it in production
+     */
+    public ZUtils() {
+        super();
+    }
 
     /**
      * This constructor is only meant for testing purpose. It serves no real purpose in production, and should never be
@@ -28,13 +37,21 @@ public class ZUtils extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
+        saveDefaultConfig();
         // Check if the SQL handler is null. If not we're in a test environment and do not need to set it as this is being done elsewbere
-        if (sqlHandler == null)
+        if (!isTest) {
             sqlHandler = new SQLHandler();
+            getCommand("warn").setExecutor(new WarningCommand());
+        }
 
         sqlHandler.createWarningTableIfNotExist();
+
+
+
+
     }
+
+
 
     @Override
     public void onDisable() {

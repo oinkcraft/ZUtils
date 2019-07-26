@@ -136,8 +136,7 @@ public class SQLHandler {
         Future<Void> future = CompletableFuture.supplyAsync(() -> {
             try {
                 Connection connection = this.connection == null ? this.getConnection() : this.connection;
-                PreparedStatement ps = connection.prepareCall("CREATE TABLE IF NOT EXISTS ?warnings (ticket INTEGER UNSIGNED NOT NULL PRIMARY KEY, uuid VARCHAR(255) NOT NULL, warning_date DATE NOT NULL, reason VARCHAR(255) NOT NULL, warnee_uuid VARCHAR(255) NOT NULL)");
-                ps.setString(1, prefix);
+                PreparedStatement ps = connection.prepareCall("CREATE TABLE IF NOT EXISTS " + prefix + "warnings (ticket INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY , uuid VARCHAR(255) NOT NULL, warning_date DATE NOT NULL, reason VARCHAR(255) NOT NULL, warnee_uuid VARCHAR(255) NOT NULL)");
                 ps.execute();
             } catch (SQLException e) {
                 e.printStackTrace();

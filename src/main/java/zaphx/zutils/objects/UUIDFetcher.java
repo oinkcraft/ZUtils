@@ -1,5 +1,6 @@
-package com.github.zaphx.discordbot.utilities;
+package zaphx.zutils.objects;
 
+import com.github.zaphx.discordbot.utilities.UUIDTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
@@ -139,6 +140,7 @@ class PlayerUUID {
 
     /**
      * This method gets the name of the player
+     *
      * @return The name of the player
      */
     public String getName() {
@@ -147,6 +149,7 @@ class PlayerUUID {
 
     /**
      * This method gets the UUID of the player
+     *
      * @return The UUID of the player
      */
     public UUID getId() {

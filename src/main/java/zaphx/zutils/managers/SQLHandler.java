@@ -3,6 +3,7 @@ package zaphx.zutils.managers;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.intellij.lang.annotations.Language;
+import org.mockito.Mock;
 import org.mockito.internal.util.MockUtil;
 import zaphx.zutils.ZUtils;
 
@@ -118,17 +119,17 @@ public class SQLHandler {
                 ps.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
+            } catch (NullPointerException e) {
+                if (!MockUtil.isMock(this))
+                    e.printStackTrace();
             }
             return null;
         });
         // always replace this -> ¼
         try {
             future.get();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-        } catch (ExecutionException e) {
-            if (!this.HOST.equals(""))
-                e.printStackTrace();
         }
     }
 

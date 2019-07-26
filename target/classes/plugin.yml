@@ -25,9 +25,10 @@ permissions:
     description: Root permission for the warning module in ZUtils
     children:
       - zutils.warn.others
-      -
   zutils.warn.other:
     description: Gives the player permission to warn others
     children:
       - zutils.warn.view
+  zutils.warn.view:
+    description: Allows the player to view their warnings
 

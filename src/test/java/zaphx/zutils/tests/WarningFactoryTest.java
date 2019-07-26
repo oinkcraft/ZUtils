@@ -65,20 +65,20 @@ public class WarningFactoryTest {
     @Test
     public void sendWarning_userGetsWarning() {
         System.out.println("Checking if user gets warning and sender gets result");
-        // SETUP
+        // Set up
         CommandSender mockCommandSender = mock(CommandSender.class);
         Player mockWarned = mock(Player.class);
         when(mockCommandSender.getName()).thenReturn("Zaphoo");
         when(mockWarned.getName()).thenReturn("Mobkinz78");
 
-        // EXPECTATIONS
         String expectedMessage = GRAY + "You have been warned by Zaphoo for: " + RED + "Hacking too hard";
         String expectedResult = GRAY + "You warned Mobkinz78 for: " + RED + "Hacking too hard";
 
-        // ACTUAL TEST
+        // Act
         WarningFactory warningFactory = new WarningFactory(zUtils, sqlHandler);
         warningFactory.sendWarning(mockWarned, mockCommandSender, "Hacking too hard");
 
+        // Verify
         verify(mockCommandSender).sendMessage(expectedResult);
         verify(mockWarned).sendMessage(expectedMessage);
     }
@@ -86,7 +86,7 @@ public class WarningFactoryTest {
     @Test
     public void autoKick_userGetsKicked() throws Exception {
         System.out.println("Checking if user gets kicked when autokick is enabled");
-        // SETUP
+        // Set up
         FileConfiguration config = mock(FileConfiguration.class);
         WarningFactory warningFactory = new WarningFactory(zUtils, sqlHandler);
         Player mockPlayer = mock(Player.class);
@@ -96,64 +96,64 @@ public class WarningFactoryTest {
         when(config.getInt("warning.autokick.warning-limit")).thenReturn(5);
         when(config.getString("warning.autokick.message")).thenReturn("You were automatically kicked by ZUtils for not abiding by the rules!");
         doReturn(5L).when(sqlHandler).countTickets(mockPlayer);
-        // EXPECTATIONS
         String expectedKickMessage = RED + "You were automatically kicked by ZUtils for not abiding by the rules!";
 
-        // ACTUAL TEST
+        // Act
         warningFactory.autoKick(mockPlayer);
 
+        // Verify
         verify(mockPlayer, times(1)).kickPlayer(expectedKickMessage);
     }
 
     @Test
     public void hasWarningLimit_userHasMoreThanLimit() throws Exception {
         System.out.println("Testing if the user has more kicks than is needed for autokick.");
-        // SETUP
+        // Set up
         FileConfiguration config = mock(FileConfiguration.class);
         Player mockPlayer = mock(Player.class);
 
         WarningFactory warningFactory = spy(new WarningFactory(zUtils, sqlHandler));
         when(zUtils.getConfig()).thenReturn(config);
         when(config.getBoolean("warning.autokick.enabled")).thenReturn(true);
-        //when(config.getInt("warning.autokick.warning-limit")).thenReturn(5);
         doReturn(5).when(config).getInt("warning.autokick.warning-limit");
         doReturn(9L).when(sqlHandler).countTickets(mockPlayer);
         doReturn(9L).when(warningFactory).getAmountOfWarnings(mockPlayer);
 
         FieldSetter.setField(warningFactory, warningFactory.getClass().getField("KICK_LIMIT"), 5);
 
+        // Act
+        boolean result = warningFactory.hasWarningLimit(ActionType.KICK, mockPlayer);
+
+
+        // Verify
         System.out.println("Player warnings: " + sqlHandler.countTickets(mockPlayer));
         System.out.println("Warning limit:   " + warningFactory.KICK_LIMIT);
         System.out.println("Return value:    " + warningFactory.hasWarningLimit(ActionType.KICK, mockPlayer));
-
-        boolean result = warningFactory.hasWarningLimit(ActionType.KICK, mockPlayer);
-
         assertTrue(result);
-
-        // ACTUAL TEST
     }
 
     @Test
     public void hasWarningLimit_userHasLessThanLimit() throws Exception {
         System.out.println("Testing if the user has less kicks than is needed for autokick.");
-
-        // SETUP
+        // Set up
         FileConfiguration config = mock(FileConfiguration.class);
         Player mockPlayer = mock(Player.class);
         WarningFactory warningFactory = spy(new WarningFactory(zUtils, sqlHandler));
 
         when(zUtils.getConfig()).thenReturn(config);
         when(config.getBoolean("warning.autokick.enabled")).thenReturn(true);
-        //when(config.getInt("warning.autokick.warning-limit")).thenReturn(5);
         doReturn(5).when(config).getInt("warning.autokick.warning-limit");
         doReturn(2L).when(sqlHandler).countTickets(mockPlayer);
         doReturn(2L).when(warningFactory).getAmountOfWarnings(mockPlayer);
 
-        // ACTUAL TEST
+        // Act
+        boolean result = warningFactory.hasWarningLimit(ActionType.KICK, mockPlayer);
+
+        // Verify
         System.out.println("Player warnings: " + sqlHandler.countTickets(mockPlayer));
         System.out.println("Warning limit:   " + warningFactory.KICK_LIMIT);
         System.out.println("Return value:    " + warningFactory.hasWarningLimit(ActionType.KICK, mockPlayer));
-        assertFalse(warningFactory.hasWarningLimit(ActionType.KICK, mockPlayer));
+        assertFalse(result);
 
     }
 
@@ -161,6 +161,7 @@ public class WarningFactoryTest {
     @Test
     public void getInstance_setsNotNull() {
         System.out.println("Testing if instance is set");
+
         WarningFactory warningFactory = new WarningFactory(zUtils, sqlHandler);
 
         assertNotNull(warningFactory);

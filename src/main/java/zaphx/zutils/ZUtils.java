@@ -13,6 +13,7 @@ public class ZUtils extends JavaPlugin {
     private static ZUtils instance;
     public SQLHandler sqlHandler;
     public boolean isTest = false;
+    public boolean isDizcordPresent = false;
 
     /**
      * This constructor is meant for the server to call. Do not use it in production
@@ -35,14 +36,23 @@ public class ZUtils extends JavaPlugin {
     }
 
     @Override
+    public void onLoad() {
+        if (getServer().getPluginManager().getPlugin("Dizcord") != null) {
+            isDizcordPresent = !isDizcordPresent;
+        }
+    }
+
+    @Override
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
         // Check if the SQL handler is null. If not we're in a test environment and do not need to set it as this is being done elsewbere
         if (!isTest) {
             sqlHandler = new SQLHandler();
-            getCommand("warn").setExecutor(new WarningCommand());
+            getCommand("warn").setExecutor(new WarningCommand(this));
         }
+
+
 
         sqlHandler.createWarningTableIfNotExist();
 
